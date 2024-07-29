@@ -13,13 +13,13 @@ const Friends = () => {
     const [searchUser, setSearchUser] = useState([])
     const [loading , setLoading ] = useState(false)
     const [searchText, setSearchText] = useState("")
-    const {setOpenAddFriend} = useContext(UserContext)
+    const {setOpenAddFriend, URL} = useContext(UserContext)
     const user = useSelector(state=>state.user)
 
     const searchUserHandler = async ()=>{
       try{
         setLoading(true)
-    const url = `${process.env.REACT_APP_BACKEND_URL}/api/user/searchUser`
+    const url = `${URL}/api/user/searchUser`
 
     const response = await axios.post(url,{searchText})
     if(response.data.success){

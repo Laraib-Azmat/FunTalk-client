@@ -10,14 +10,14 @@ import { logout, setUser } from '../../redux/userSlice'
 
 function Home() {
  
-  const {openAddFriend} = useContext(UserContext)
+  const {openAddFriend, URL} = useContext(UserContext)
   const location = useLocation()
  const navigate = useNavigate()
  const dispatch = useDispatch()
  const basePath = location.pathname === '/'
   
   const logoutHandler = async ()=>{
-    const url = `${process.env.REACT_APP_BACKEND_URL}/api/user/logout`
+    const url = `${URL}/api/user/logout`
     const response = await axios.get(url,{withCredentials:true})
     if (response){
       dispatch(logout())
@@ -28,7 +28,7 @@ function Home() {
 
   const fetchUserDetails = async ()=>{
     try{
-      const url = `${process.env.REACT_APP_BACKEND_URL}/api/user/user-details`
+      const url = `${URL}/api/user/user-details`
       const response = await axios.get(url,{
         withCredentials:true})
 

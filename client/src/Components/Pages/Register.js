@@ -60,7 +60,7 @@ function Register() {
        formData.append("profilePic",data.profilePic)
        
       const action = state==="Login"?"login":"register";
-       const url = `${process.env.REACT_APP_BACKEND_URL}/api/user/${action}`
+       const url = `http://localhost:4000/api/user/${action}`
      
     
       const response = await axios.post(url, formData,{withCredentials:true})

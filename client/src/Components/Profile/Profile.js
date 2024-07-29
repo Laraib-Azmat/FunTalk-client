@@ -28,11 +28,11 @@ const Profile = () => {
      try{
       let response;
       if (editState==="name"){
-      const url = `${process.env.REACT_APP_BACKEND_URL}/api/user/updateName`
+      const url = `http://localhost:4000/api/user/updateName`
        response = await axios.post(url,{name:newText},{withCredentials:true})
     }
       else{
-        const url = `${process.env.REACT_APP_BACKEND_URL}/api/user/updateEmail`
+        const url = `http://localhost:4000/api/user/updateEmail`
          response = await axios.post(url,{email:newText},{withCredentials:true})
       }
       if(response.data.success){
