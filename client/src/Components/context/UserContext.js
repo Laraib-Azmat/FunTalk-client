@@ -9,7 +9,7 @@ export const ContextProvider = ({ children }) => {
   const [openAddFriend, setOpenAddFriend] = useState(false);
    const dispatch = useDispatch()
    const[socketConnection, setSocketConnection] = useState(null)
-   URL="http://localhost:4000"
+   URL=window.location.origin
   //socket connection
   useEffect(()=>{
     const socketConnection = io(process.env.REACT_APP_BACKEND_URL,{
