@@ -12,7 +12,7 @@ export const ContextProvider = ({ children }) => {
    URL=window.location.origin
   //socket connection
   useEffect(()=>{
-    const socketConnection = io(process.env.REACT_APP_BACKEND_URL,{
+    const socketConnection = io(window.location.origin,{
       auth:{
         token:localStorage.getItem("token")
       }
