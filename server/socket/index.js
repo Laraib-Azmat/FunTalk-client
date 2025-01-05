@@ -25,9 +25,6 @@ io.on("connection",async (socket)=>{
 
     const token =  socket.handshake.auth.token
 
-    console.log("evry timeee:: ",socket.handshake);
-    
-  
     //current user details
       const user  =  await userDetails(token)
 
