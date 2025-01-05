@@ -4,6 +4,7 @@ import { UserContext } from '../context/UserContext'
 import { useSelector } from 'react-redux'
 
 const UserCard = ({user}) => {
+  
   const {setOpenAddFriend} = useContext(UserContext)
   const onlineuser = useSelector(state=>state.user.onlineUser)
  const isActive = onlineuser.includes(user._id)

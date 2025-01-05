@@ -9,11 +9,14 @@ import { NavLink } from 'react-router-dom'
 import helloImg from "../../assets/helloImg.png"
 import { UserContext } from '../context/UserContext'
 
+
+
 const Sidebar = () => {
   const [allUsers, setAllUsers] = useState([])
   const user = useSelector(state => state?.user)
   const [loading, setLoading] = useState(false)
   const {setOpenAddFriend, socketConnection} = useContext(UserContext)
+  const onlineuser = useSelector(state=>state.user.onlineUser)
 
   useEffect(() => {
     if (socketConnection) {
@@ -64,32 +67,36 @@ const Sidebar = () => {
             {loading && <ClipLoader color='purple' className='mt-10' />}
             {allUsers.map((convuser, i) => (
            
+
+
               <NavLink to={"/"+convuser.userDetail?._id} key={i} className='bg-white p-2 rounded-xl shadow-lg flex items-center justify-between cursor-pointer hover:bg-green-100'>
                 <div className='relative w-16 h-16 bg-[#E4C2C1] rounded-full flex justify-center items-center shadow-2xl'>
                   {convuser.userDetail?.profilePic ? (
                     <img src={convuser.userDetail?.profilePic} alt='profile' className='w-full h-full object-cover rounded-full' />
-                  ) : (
+                   ) : (
                     <p className='text-4xl font-mono font-bold text-red-900'> {convuser.userDetail?.name[0]} </p>
                   )}
+                   {onlineuser.includes(convuser.userDetail._id) ? <div className='bg-green-500 w-2 h-2 sm:w-4 sm:h-4 absolute top-0 sm:left-2 left-0 rounded-full'></div> :''}
                 </div>
 
                 <div className='ml-4 flex-1 overflow-x-hidden'>
                   <p className='text-red-900 font-poppins font-semibold'>{convuser.userDetail?.name}</p>
-                  {convuser.lastMsg.imageUrl &&(
+                   {(convuser.lastMsg && !convuser.lastMsg.imageUrl && !convuser.lastMsg.vedioUrl)&&(
+                    <p className=' text-sm text-ellipsis  overflow-x-hidden line-clamp-1'>{convuser.lastMsg.text}</p>
+                  )}
+                  {convuser.lastMsg && convuser.lastMsg.imageUrl &&(
                     <div className='flex items-center '>
                       <img src={imgLogo} alt='image' className='w-5 h-5 object-scale-down' />
                       <p className=' text-sm text-ellipsis overflow-x-hidden w-full line-clamp-1'>{convuser.lastMsg.text?convuser.lastMsg.text:'Image'}</p>
                       </div>
                   )}
-                   {convuser.lastMsg.vedioUrl &&(
+                   {convuser.lastMsg && convuser.lastMsg.vedioUrl &&(
                     <div className='flex items-center gap-1'>
                       <img src={vedioLogo} alt='video' className='w-5 h-5 object-scale-down' />
                       <p className=' text-sm text-ellipsis overflow-x-hidden w-full line-clamp-1'>{convuser.lastMsg.text?convuser.lastMsg.text:'Video'}</p>
                       </div>
                   )}
-                  {(!convuser.lastMsg.imageUrl && !convuser.lastMsg.vedioUrl)&&(
-                    <p className=' text-sm text-ellipsis  overflow-x-hidden line-clamp-1'>{convuser.lastMsg.text}</p>
-                  )}
+                 
                 </div>
              
                {Boolean(convuser.unseenMsg )&& (

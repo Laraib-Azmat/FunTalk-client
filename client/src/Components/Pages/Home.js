@@ -31,7 +31,6 @@ function Home() {
     try{
       const url = `${URL}/api/user/user-details`
       const response = await axios.get(url,{withCredentials:true})
-      console.log("responseee: ",response);
       if(response.data.logout){
         logoutHandler()
       }

@@ -11,8 +11,7 @@ const app = express()
     //   socket connection
 const server = http.createServer(app)
 const io= new Server(server,{
-    cors:{
-        
+    cors:{     
         origin:"*"
     }
 })
@@ -24,16 +23,21 @@ io.on("connection",async (socket)=>{
 
     console.log("Connected User ",socket.id);
 
-    const token = socket.handshake.auth.token
+    const token =  socket.handshake.auth.token
+
+    console.log("evry timeee:: ",socket.handshake);
     
+  
     //current user details
       const user  =  await userDetails(token)
+
     //creating room 
     if(user){socket.join(user?._id.toString())
     onlineUser.add(user?._id?.toString())}
-
+   
     io.emit("onlineUser",Array.from(onlineUser))
 
+    //Meggaging
     socket.on("message-page", async (userId) => {
         try {
             const userDetail = await userModel.findById(userId).select("-password");

@@ -10,13 +10,17 @@ export const ContextProvider = ({ children }) => {
   const [openAddFriend, setOpenAddFriend] = useState(false);
    const dispatch = useDispatch()
       const URL="http://localhost:5000"
+
    //socket connection for real-time messages
    const[socketConnection, setSocketConnection] = useState(null)
+
   //socket connection
   useEffect(()=>{
-    const socketConnection = io(window.location.origin,{
+      //Token from local storage
+ const token = localStorage.getItem("token");
+    const socketConnection = io(URL,{
       auth:{
-        token:localStorage.getItem("token")
+        token:token
       }
     })
 

@@ -14,10 +14,11 @@ const Options = () => {
     const navigate = useNavigate()
     const { setOpenAddFriend} = useContext(UserContext)
     const dispatch = useDispatch()
+    const {URL} = useContext(UserContext)
 
     const logoutHandler = async ()=>{
 
-       const url = `${process.env.REACT_APP_BACKEND_URL}/api/user/logout`
+       const url = `${URL}/api/user/logout`
         const response = await axios.get(url,{withCredentials:true})
         if(response.data.success){
           dispatch(logout())

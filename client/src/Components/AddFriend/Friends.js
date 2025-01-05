@@ -36,6 +36,8 @@ const Friends = () => {
       }
     }
 
+    
+
     useEffect(()=>{
       searchUserHandler()
     },[searchText])

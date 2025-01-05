@@ -56,6 +56,7 @@ const Message = () => {
 
       socketConnection.on('message',(data)=>{
           setAllMessages(data)
+          
       })
     }
   },[socketConnection,params?.userId,user, allMessages])
@@ -89,7 +90,7 @@ const Message = () => {
   setLoading(true)
   if(image){  
     const response = await UploadFile(image)
-    console.log("video response: ",response);
+    console.log("image response: ",response);
     setLoading(false)
     return response
   
