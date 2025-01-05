@@ -12,7 +12,8 @@ const app = express()
 const server = http.createServer(app)
 const io= new Server(server,{
     cors:{     
-        origin:"*"
+        origin:"https://fun-talk-client-frontend.vercel.app",
+        methods: ["GET", "POST"]
     }
 })
 
