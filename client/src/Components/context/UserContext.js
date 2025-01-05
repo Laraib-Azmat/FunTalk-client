@@ -19,7 +19,8 @@ export const ContextProvider = ({ children }) => {
       //Token from local storage
  const token = localStorage.getItem("token");
     const socketConnection = io(URL,{
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
+      reconnectionAttempts:5,
       auth:{
         token:token
       }
