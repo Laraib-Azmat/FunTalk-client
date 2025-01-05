@@ -13,7 +13,8 @@ const server = http.createServer(app)
 const io= new Server(server,{
     cors:{     
         origin:"https://fun-talk-client-frontend.vercel.app",
-        methods: ["GET", "POST"]
+        allowedHeaders: ["Authorization", "Content-Type"],
+        credentials: true,
     }
 })
 
