@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Wave from '../UI/Wave'
 import person from "../../assets/person.svg"
 import cactus from "../../assets/cactus.svg"
@@ -12,6 +12,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {ClipLoader} from "react-spinners"
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../redux/userSlice';
+import { UserContext } from '../context/UserContext';
 
 function Register() {
 
@@ -24,6 +25,7 @@ function Register() {
     const [profilePicture, setProfilePicture] = useState(null);
     const [state, setState] = useState("Login")
     const [loading, setLoading] = useState(false)
+    const {URL} = useContext(UserContext)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -60,10 +62,11 @@ function Register() {
        formData.append("profilePic",data.profilePic)
        
       const action = state==="Login"?"login":"register";
-       const url = `${window.location.origin}/api/user/${action}`
+       const url = `${URL}/api/user/${action}`
      
     
       const response = await axios.post(url, formData,{withCredentials:true})
+      
        if(response.data.success){
         dispatch(setToken(response.data.token))
         toast.success(response.data.message)

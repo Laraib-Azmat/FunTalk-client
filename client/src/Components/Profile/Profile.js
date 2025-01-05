@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Wave from '../UI/Wave'
 import { useDispatch, useSelector } from 'react-redux'
 import profileImg from "../../assets/profilePic.png"
@@ -9,6 +9,7 @@ import crossIcon from "../../assets/crossIcon.png"
 import axios from "axios"
 import {toast} from "react-toastify"
 import { setUser } from '../../redux/userSlice'
+import { UserContext } from '../context/UserContext'
 
 const Profile = () => {
 
@@ -17,6 +18,7 @@ const Profile = () => {
     const [editState, setEditState] = useState("")
    const [newText, setNewText] = useState("")
    const dispatch = useDispatch()
+   const {URL} = useContext(UserContext)
 
    const handleInputChange = (e) => {
     setNewText(e.target.value);
@@ -28,11 +30,11 @@ const Profile = () => {
      try{
       let response;
       if (editState==="name"){
-      const url = `http://localhost:4000/api/user/updateName`
+      const url = `${URL}/api/user/updateName`
        response = await axios.post(url,{name:newText},{withCredentials:true})
     }
       else{
-        const url = `http://localhost:4000/api/user/updateEmail`
+        const url = `${URL}/api/user/updateEmail`
          response = await axios.post(url,{email:newText},{withCredentials:true})
       }
       if(response.data.success){

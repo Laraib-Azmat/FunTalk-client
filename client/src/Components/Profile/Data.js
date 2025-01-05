@@ -1,14 +1,15 @@
-import React, {  useState } from 'react';
+import React, {  useContext, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import {toast} from "react-toastify"
 import { setUser } from '../../redux/userSlice';
+import { UserContext } from '../context/UserContext';
 
 const Data = () => {
   const user = useSelector(state => state.user);
   const [showDelete, setShowDelete] = useState(!!user.profilePic);
   const dispatch = useDispatch();
-
+  const {URL} = useContext(UserContext)
   
 
   const handleFileChange = async (e) => {
@@ -16,11 +17,11 @@ const Data = () => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append('profilePic', file);
-    const url = `${process.env.REACT_APP_BACKEND_URL}/api/user/updatePic`
+    const url = `${URL}/api/user/updatePic`
     const response = await axios.post(url,formData,{withCredentials:true})
    if(response.data.success){
     toast.success(response.data.message)
-    dispatch(setUser({_id:user._id,name:user.name,email:user.email,profilePic:URL.createObjectURL(file),token:user.token}))
+    dispatch(setUser({_id:user._id,name:user.name,email:user.email,profilePic:file,token:user.token}))
    }else{
     toast.error(response.data.message)
    }

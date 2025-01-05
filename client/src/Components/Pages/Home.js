@@ -18,7 +18,8 @@ function Home() {
   
   const logoutHandler = async ()=>{
     const url = `${URL}/api/user/logout`
-    const response = await axios.get(url,{withCredentials:true})
+    const response = await axios.get(url)
+    
     if (response){
       dispatch(logout())
       localStorage.removeItem('token')
@@ -29,9 +30,8 @@ function Home() {
   const fetchUserDetails = async ()=>{
     try{
       const url = `${URL}/api/user/user-details`
-      const response = await axios.get(url,{
-        withCredentials:true})
-
+      const response = await axios.get(url,{withCredentials:true})
+      console.log("responseee: ",response);
       if(response.data.logout){
         logoutHandler()
       }
@@ -40,17 +40,18 @@ function Home() {
         dispatch(setUser(response.data.data))
       }else{
         dispatch(logout())
+        logoutHandler()
       }
 
     }catch(error){
       console.log(error);
+      logoutHandler()
       
     }
   }
 
   useEffect(()=>{
           fetchUserDetails()
-
   },[])
 
   return (

@@ -8,10 +8,13 @@ const path = require("path")
 require('dotenv').config()
 
 //initialize app
-// const app = express();
+ //const app = express();
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000', // Replace with your frontend's URL
+    credentials: true, // Allow credentials (cookies) to be sent
+  }))
 
 const port = process.env.PORT || 5000
 
