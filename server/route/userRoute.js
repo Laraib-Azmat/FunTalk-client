@@ -6,6 +6,7 @@ const logoutUser = require("../controller/logout")
 const { updateUserName, updateEmail, updateProfilePic } = require("../controller/updateUser");
 const searchUser = require('../controller/searchUser');
 const getDetails = require('../controller/getDetails');
+const deleteAccount = require('../controller/deleteAccount');
 
 
 const storage = multer.diskStorage({});
@@ -22,6 +23,7 @@ userRouter.post("/updateEmail",updateEmail)
 userRouter.post("/updatePic",upload.single('profilePic'),updateProfilePic)
 userRouter.get("/user-details", getDetails)
 userRouter.post("/searchUser", searchUser)
+userRouter.post("/delete-account", deleteAccount)
 
 
 module.exports = userRouter

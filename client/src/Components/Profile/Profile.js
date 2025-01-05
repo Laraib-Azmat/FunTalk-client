@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Wave from '../UI/Wave'
 import { useDispatch, useSelector } from 'react-redux'
 import profileImg from "../../assets/profilePic.png"
@@ -8,16 +8,20 @@ import Model from '../UI/Model'
 import crossIcon from "../../assets/crossIcon.png"
 import axios from "axios"
 import {toast} from "react-toastify"
-import { setUser } from '../../redux/userSlice'
+import { setUser,logout } from '../../redux/userSlice'
 import { UserContext } from '../context/UserContext'
+import { useNavigate } from 'react-router-dom'
 
 const Profile = () => {
 
     const user = useSelector(state=>state.user)
     const [eiditVisible, setEditVisible] = useState(false)
+    const [deleteVisible, setDeleteVisible] = useState(false)
     const [editState, setEditState] = useState("")
    const [newText, setNewText] = useState("")
+   const [deletePassword, setdeletePassword]= useState("")
    const dispatch = useDispatch()
+    const navigate = useNavigate()
    const {URL} = useContext(UserContext)
 
    const handleInputChange = (e) => {
@@ -64,6 +68,79 @@ const Profile = () => {
     }
   }
 
+  //logout if token not match
+  const logoutHandler = async ()=>{
+    const url = `${URL}/api/user/logout`
+    const response = await axios.get(url)
+    
+    if (response){
+      dispatch(logout())
+      localStorage.removeItem('token')
+      navigate("/register")
+    }
+  }
+
+  //Delete Account Permanently
+  const deleteAccountHandler=async ()=>{
+    if(deletePassword!==""){
+
+      try{
+         const url = `${URL}/api/user/delete-account`;
+         const response = await axios.post(url, {password:deletePassword}, {withCredentials:true})
+
+         if(response.data.success){
+          dispatch(logout())
+          localStorage.removeItem('token')
+          navigate("/register")
+          toast.success("User Deleted Succesfully")
+          setDeleteVisible(false)
+          setdeletePassword("")
+
+         }else if(response.data.logout){
+            logoutHandler()
+            setdeletePassword("")
+         }else{
+          toast.error(response.data.message)
+          setDeleteVisible(false)
+          setdeletePassword("")
+         }
+
+      }catch(error){
+        console.log(error);
+        toast.error("Something went wrong...")
+      }
+
+    }else{
+      toast.error("Write some text")
+    }
+  }
+
+  //get user when the page reload
+  const fetchUserDetails = async ()=>{
+    try{
+      const url = `${URL}/api/user/user-details`
+      const response = await axios.get(url,{withCredentials:true})
+      if(response.data.logout){
+        logoutHandler()
+      }
+      if(response.data.success){
+
+        dispatch(setUser(response.data.data))
+      }else{
+        dispatch(logout())
+        logoutHandler()
+      }
+
+    }catch(error){
+      console.log(error);
+      logoutHandler()
+      
+    }
+  }
+
+  useEffect(()=>{
+          fetchUserDetails()
+  },[])
 
   return (
 
@@ -94,7 +171,7 @@ const Profile = () => {
 
     <div className='flex flex-col items-center gap-5  '>
         <button className='bg-green-700 p-2 rounded-e-lg text-white font-mono font-semibold'  >Change Password</button>
-        <button className='bg-red-400 p-2 rounded-e-lg text-white font-mono font-semibold ' >Delete Account</button>
+        <button className='bg-red-400 p-2 rounded-e-lg text-white font-mono font-semibold ' onClick={()=>setDeleteVisible(true)} >Delete Account</button>
     </div>
     
     </div>
@@ -128,6 +205,38 @@ const Profile = () => {
             </button>
             <button onClick={updateUsername} className="px-4 py-2 bg-green-800 text-white rounded hover:bg-green-600 transition font-mono">
                 Update
+            </button>
+          </div>
+        </div>
+
+      </Model>
+
+      {/* Delete User Model */}
+
+      <Model isOpen={deleteVisible} onClose={()=>setDeleteVisible(false)} >
+
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-md">
+          <div className="p-4 flex justify-between items-center">
+            <h2 className=" font-semibold text-red-900 font-mono text-2xl">Delete Account</h2>
+            <button onClick={()=>{setDeleteVisible(false);setdeletePassword("")}} className="text-gray-500 hover:text-gray-700">
+              <img src={crossIcon} alt='cross'/>
+            </button>
+          </div>
+          <div className="px-6">
+            <p className='bg-pink-200 p-2 font-poppins rounded-md w-full'>{user.email}</p> 
+          </div>
+          <div className="px-6 py-4">
+            <input type='text' value={deletePassword}  onChange={(e)=>setdeletePassword(e.target.value)} className='bg-pink-200 p-2 font-poppins rounded-md w-full to-black' autoFocus placeholder='Write Password' />
+          </div>
+          <div className="p-4 border-t flex justify-end gap-5">
+            <button
+              onClick={()=>{setDeleteVisible(false);setdeletePassword("")}}
+              className="px-4 py-2 bg-red-500  text-white rounded hover:bg-red-600 transition font-mono"
+            >
+              Close
+            </button>
+            <button onClick={deleteAccountHandler} className="px-4 py-2 bg-green-800 text-white rounded hover:bg-green-600 transition font-mono">
+              Delete Permanently
             </button>
           </div>
         </div>
