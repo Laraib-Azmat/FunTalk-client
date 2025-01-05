@@ -9,7 +9,7 @@ export const ContextProvider = ({ children }) => {
 
   const [openAddFriend, setOpenAddFriend] = useState(false);
    const dispatch = useDispatch()
-      const URL="https://fun-talk-backend-lga3kco46-laraib-azmats-projects.vercel.app/"
+      const URL="https://fun-talk-backend.vercel.app"
 
    //socket connection for real-time messages
    const[socketConnection, setSocketConnection] = useState(null)

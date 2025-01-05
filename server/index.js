@@ -12,7 +12,7 @@ require('dotenv').config()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with your frontend's URL
+    origin: 'https://fun-talk-client-frontend.vercel.app', // Replace with your frontend's URL
     credentials: true, // Allow credentials (cookies) to be sent
   }))
 
